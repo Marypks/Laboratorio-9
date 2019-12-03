@@ -1,0 +1,155 @@
+---
+title: "Laboratorio9_Maribel_Viarraga"
+author: "Maribel Pks"
+date: "30/11/2019"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: lumen
+    df_print: kable
+    css: styles.css
+---
+
+### *Con mucho esfuerzo pero casi salió la tarea :)*
+
+Llamando a la biblioteca siempre al inicio
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(ggplot2)
+```
+
+# La contaminación de los oceanos 
+
+
+### Mallas utilizadas en esta tarea
+* Estas mallas pretenden darnos una idea de la situación tan grave en la que nos encontramos, con respecto a la producción de residuos que son arrojados al mar y los paises que los producen.* 
+
+```{r}
+coast_vs_waste <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-21/coastal-population-vs-mismanaged-plastic.csv")
+
+mismanaged_vs_gdp <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-21/per-capita-mismanaged-plastic-waste-vs-gdp-per-capita.csv")
+
+waste_vs_gdp <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-21/per-capita-plastic-waste-vs-gdp-per-capita.csv")
+
+```
+
+
+
+## De las costas y los desperdicios 
+Iniciaremos con una exploración a cerca de la relación de residuos o desperdicios producidos y la cantidad de población en las costas de los paises en 2010.
+
+```{r}
+coast_vs_waste %>% 
+  sample_n(45, replace=T) %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = c("striped",
+                                      "hover",
+                                      "condensed"),
+                full_width = F,
+                fixed_thead = T) %>%
+  row_spec(0, color = "blue") %>% 
+  scroll_box(height = "250px") 
+
+
+ggplot(coast_vs_waste, aes(`Coastal population`, `Mismanaged plastic waste (tonnes)`)) +
+  geom_point(color="steelblue",
+             fill="#69b3a2",
+             shape=21,
+             alpha=0.5,
+             size=6,
+             stroke = 2) + 
+  geom_smooth(method="lm", se=F) +
+  labs(subtitle = "¿Las costas producen toda la basura?", 
+       y = "Toneladas de plásticos", 
+       x = "Población Costera", 
+       title = "Relación entre mal manejo de plásticos y población costera", 
+       caption = "Fuente: tidytuesday") +
+  theme_bw()
+
+```
+* Y pues no, las costas no tienen toda la culpa * 
+
+ 
+## Relación de PIB y mal manejo de desperdicios plásticos en el Mundo
+
+Al parecer el mal manejo de basura disminuye conforme aumenta el PIB, aunque en gran manera es desigual, al encontrar una gran concentración entre 0 y 0.1 kg producidos al día, en PIB menores a 4000 USD.*Quizá será porque a menor PIB también se cuenta con menores posibilidades de manejo de residuos, a diferencia de paises con alto PIB*
+
+```{r}
+mismanaged_vs_gdp %>% 
+  filter(Year== "2010")%>%
+  sample_n(220, replace=T) %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = c("striped",
+                                      "hover",
+                                      "condensed"),
+                full_width = F,
+                fixed_thead = T) %>%
+  row_spec(0, color = "green") %>% 
+  scroll_box(height = "250px") 
+
+
+ggplot (mismanaged_vs_gdp, aes(x= `Per capita mismanaged plastic waste (kilograms per person per day)`, y=`GDP per capita, PPP (constant 2011 international $) (Rate)`) ) +
+  geom_hex(bins = 15) +
+  scale_fill_continuous(type = "viridis") +
+  labs(title="Relación producción de desperdicio vs PIB En el Mundo", 
+       subtitle="Para el año 2010", 
+       caption="Fuente: ditytuesday", 
+       y="PIB en dólares constantes para 2011", 
+       x="Kiligramos/Persona/Día") +
+  theme_bw()
+
+```
+
+
+## Ahora otra con la misma base porque no me salió con la otra
+
+Pero el chiste es practicar
+
+```{r}
+ggplot(mismanaged_vs_gdp, aes(x=`Per capita mismanaged plastic waste (kilograms per person per day)`, y=`Total population (Gapminder)`)) +
+  geom_point( size=5, color="pink",fill=alpha("pink", 0.6), alpha=0.7 , shape=18 , stroke=2) + 
+  geom_segment( aes(x=`Per capita mismanaged plastic waste (kilograms per person per day)`, xend=`Per capita mismanaged plastic waste (kilograms per person per day)`, y=0, yend=`Total population (Gapminder)`))+
+  labs(title="Relación producción de desperdicio vs PIB En el Mundo", 
+       subtitle="Sorry, no me salió con la otra , pero esta quedó bonita", 
+       caption="Fuente: pmoracho.github.io", 
+       y="PIB en dólares constantes para 2011", 
+       x="Kiligramos/Persona/Día") +
+  theme_bw()
+
+
+```
+
+
+## Sigue una animada a ver si me sale
+
+Ok creo que en esta tendré que practicar más, en cuanto me salga, prometo mandarla.
+
+
+## Github
+
+Aquí adjunto la liga de mi perfil usuario de Github 
+Marypks[https://github.com/Marypks]
+
+Y el repositorio
+Laboratorio 9 [https://github.com/Marypks/Laboratorio-9.git]
+
+## Voliá, así quedó mi gráfico publicado en redes
+
+Puse ese porque fue el primero que me salió y me dió mucho gusto 
+
+```{r}
+ include_graphics("/Users/marypks/Documents/R/Tweet para la clase9.PNG")
+```
+
+**Y en vista de que casi me ha salido la tarea...**
+
+```{r}
+include_graphics("/Users/marypks/Documents/R/Ha triunfado el mal.jpg")
+```
+
+"C:\Users\marypks\Documents\R\Ha triunfado el mal.jpg"
